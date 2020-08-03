@@ -1,0 +1,109 @@
+.head {
+    height: 48px;
+    background-color: #23232D;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.title {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+
+.marginLeft {
+    margin-left: 16px;
+    line-height: 48px;
+}
+
+.marginRight {
+    margin-right: 12px;
+    line-height: 48px;
+}
+
+.right {
+    float: right;
+}
+
+.circle {
+    border-radius: 50px;
+}
+
+.circlePoint {
+    width: 18px;
+    height: 18px;
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
+.backOrange {
+    background-color: #EAC670;
+}
+
+.backPink {
+    background-color: #D86298;
+}
+
+.backBlue {
+    background-color: #635AE4;
+}
+
+.formItem {
+    margin-left: 40px;
+    margin-right: 40px;
+    caret-color: #f759ab;
+}
+
+.input {
+    color: white;
+    /*border-bottom: 1px solid #646361;*/
+}
+
+.button {
+    margin-top: 24px;
+    height: 48px;
+    margin-bottom: 0;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.block {
+    display: inline-block;
+}
+
+.body {
+    background-color: #2B2B35;
+}
+
+.matchWidth {
+    width: 100%;
+}
+
+.centerPic {
+    margin: 28px 48% 32px 44%;
+}
+
+.center {
+    text-align: center;
+}
+
+.borderRadius {
+    border-radius: 15px;
+}
+
+.icon {
+    font-size: 20px;
+    color: #646361;
+}
+
+.verticalCenter {
+    align-self: center;
+    margin: 0 auto;
+    min-width: 450px;
+}
+
+.bg {
+    background-image: url("../../img/loginbg.jpg");
+    background-position: center;
+    background-size: cover;
+}
