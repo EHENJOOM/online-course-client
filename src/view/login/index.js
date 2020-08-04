@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import {Button, Form, Input} from "antd";
 import styles from './login.module.less';
 import Style from './Login.module.css';
-import {CloseCircleOutlined} from '@ant-design/icons'
+import {CloseCircleOutlined, UserOutlined, LockOutlined} from '@ant-design/icons'
 import {MyAvatar} from "./MyAvatar";
-import UserOutlined from "@ant-design/icons/lib/icons/UserOutlined";
-import LockOutlined from "@ant-design/icons/lib/icons/LockOutlined";
 import {login} from "../../api";
+import Config from "../../config/config";
 
 class Login extends Component {
 
@@ -53,7 +52,17 @@ class Login extends Component {
 
     onFinish = values => {
         login(values).then(response => {
-            console.log(response);
+            /*switch (response.code) {
+                case Config.SUCCESS:
+                    localStorage.setItem("number", response.data.number);
+                    localStorage.setItem("token", response.data.token);
+                    localStorage.setItem("user", response.data.user);
+                    break;
+                case Config.OPERATE_FAIL:
+                    console.log(response.data);
+                    break;
+                default:
+            }*/
         });
     }
 }

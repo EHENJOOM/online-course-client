@@ -1,6 +1,9 @@
 import axios from "axios";
 import {message} from "antd";
 import {stringify} from "qs";
+import Config from "../config/config";
+import history from "../index";
+import {createHashHistory} from "history";
 
 const service = axios.create({
     baseURL: "http://localhost:8001/"
@@ -37,7 +40,13 @@ const login = values => {
         params: {"number": values.number, "password": values.password}
     });
 };
+const authorize = (number, token) => {
+    return service.get('authorize', {
+        params: {"number": number, "token": token}
+    });
+};
 
 export {
     login,
+    authorize,
 }

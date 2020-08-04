@@ -5,7 +5,7 @@ import {Spin} from "antd";
 class Loading extends Component {
     render() {
         return (
-            <div className={Style.matchParent}>
+            <div className={[Style.matchParent, Style.flex].join(" ")}>
                 <div className={Style.center}>
                     <Spin />
                 </div>

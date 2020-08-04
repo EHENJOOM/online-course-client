@@ -9,18 +9,16 @@ import {ConfigProvider} from "antd";
 import {HashRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import {commonRoutes} from "./routers";
 import 'antd/dist/antd.less';
-import {Login} from "./view";
+import {createHashHistory} from "history";
+
+const history = createHashHistory();
 
 ReactDOM.render(
   <ConfigProvider locale={zhCN}>
-      <Router>
+      <Router history={history}>
           <Switch>
               <Route path={'/student'} render={rootProps => {
-                  // 授权检测
-                  if (!localStorage.getItem("token")) {
-                      rootProps.history.push('/login');
-                  }
-                  return <Student {...rootProps}/>
+                  return <Student {...rootProps}/>;
               }}/>
               {/*<Route path={'/admin'} render={rootProps => {
 
