@@ -1,0 +1,77 @@
+.center {
+    text-align: center;
+}
+
+.body {
+    height: 100%;
+    margin-bottom: 52px;
+    padding: 0 50px;
+}
+
+.matchHeight {
+    height: 100%;;
+}
+
+.parent {
+    height: 600px;
+    position: relative;
+}
+
+.content {
+    border-radius: 15px;
+    background: #fff;
+    padding: 24px;
+    height: 100%;
+    margin-bottom: 24px;
+}
+
+.marginTop30 {
+    margin-top: 30px;
+}
+
+.marginTop18 {
+    margin-top: 18px;
+}
+
+.displayFlex {
+    display: flex;
+}
+
+.affixImg {
+    width: 60%;
+    height: 60%;
+    margin: 24px auto 8px auto;
+}
+
+.affixBody {
+    background-color: white;
+    padding: 24px;
+}
+
+.borderRadius15 {
+    border-radius: 15px;
+}
+
+.courseListTitle {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.coverImg {
+    height: 150px;
+}
+
+.edit {
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.edit:hover {
+    color: #f759ab;
+}
+
+.title {
+    color: black;
+    font-size: 26px;
+    font-weight: bold;
+}

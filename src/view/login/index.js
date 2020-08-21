@@ -52,17 +52,27 @@ class Login extends Component {
 
     onFinish = values => {
         login(values).then(response => {
-            /*switch (response.code) {
+            switch (response.code) {
                 case Config.SUCCESS:
                     localStorage.setItem("number", response.data.number);
                     localStorage.setItem("token", response.data.token);
                     localStorage.setItem("user", response.data.user);
+                    localStorage.setItem("id", response.data.id);
+                    if (response.data.user === Config.USER_STUDENT) {
+                        this.props.history.push('/student');
+                    } else if (response.data.user === Config.USER_ADMIN) {
+                        this.props.history.push('/admin');
+                    } else if (response.data.user === Config.USER_OFFICER) {
+                        this.props.history.push('/officer');
+                    } else if (response.data.user === Config.USER_TEACHER) {
+                        this.props.history.push('/teacher');
+                    }
                     break;
                 case Config.OPERATE_FAIL:
                     console.log(response.data);
                     break;
                 default:
-            }*/
+            }
         });
     }
 }

@@ -10,4 +10,5 @@ export default class Config {
     static OPERATE_FAIL = 302;
     static NOT_AUTHORIZE = 405;
     static SERVER_ERROR = 500;
+    static NO_DATA = 501;
 }
