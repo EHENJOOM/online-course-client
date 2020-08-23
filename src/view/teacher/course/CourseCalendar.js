@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import BraftEditor from "braft-editor";
 import {updateCourseCalendar} from "../../../api";
 import Config from "../../../config/config";
+import 'braft-editor/dist/index.css';
 import {Button, Card, message} from "antd";
 
 class CourseCalendar extends Component {

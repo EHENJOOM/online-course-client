@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import BraftEditor from "braft-editor";
 import {updateCourseOutline} from "../../../api";
 import Config from "../../../config/config";
+import 'braft-editor/dist/index.css';
 import {Button, Card, message} from "antd";
 
 class CourseOutline extends Component {
@@ -57,16 +58,13 @@ class CourseOutline extends Component {
     }
 
     render() {
-        const { editorState } = this.state
+        const { editorState } = this.state;
 
         return (
             <div>
                 <Card title={'教学大纲'} extra={<Button type={'primary'} onClick={this.update.bind(this)}>保存</Button>}>
                     <div className="editor-wrapper">
-                        <BraftEditor
-                            value={editorState}
-                            onChange={this.handleChange}
-                        />
+                        <BraftEditor value={editorState} onChange={this.handleChange}/>
                     </div>
                 </Card>
             </div>

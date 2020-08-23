@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import Style from "../../view.module.css";
 import {Pie, Column} from '@ant-design/charts';
-import {Button, Card, Col, message, Row, Select, Statistic, Table, Tabs, Tag, Tooltip} from "antd";
-import {EditOutlined, PlusOutlined, ArrowUpOutlined, ArrowDownOutlined} from "@ant-design/icons";
-import {getSubmitWorkStatisticsByWorkId, getWorkTitleByTeacherId} from "../../../api";
+import {Card, Col, message, Row, Select, Statistic, Table, Tabs, Tag, Tooltip} from "antd";
+import {EditOutlined, PlusSquareOutlined, DatabaseOutlined, PieChartOutlined, CheckSquareOutlined} from "@ant-design/icons";
+import {getSubmitWorkStatisticsByWorkId, getWorkByLimit, getWorkTitleByTeacherId} from "../../../api";
 import Config from "../../../config/config";
+import {CourseHomeworkEdit} from "../../index";
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -14,14 +15,10 @@ class CourseHomework extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            workData: [
-                {
-                    index: 1,
-                    title: '基于B/S架构的在线教育平台',
-                    deadline: '2020/08/19 12:00:00',
-                    publish: '1',
-                }
-            ],
+            page: 1,
+            total: 0,
+            pageSize: 5,
+            workData: [],
             statistics: {
                 total: 0,
                 notSubmit: 0,
@@ -64,6 +61,45 @@ class CourseHomework extends Component {
         }).catch(e => {
             message.error("无法连接到服务器！");
         });
+        this.getWorkColumn(this.state.page, this.state.pageSize);
+    }
+
+    getWorkColumn = (page, pageSize) => {
+        const {number, token} = this.state;
+        let courseId = this.props.match.params.id;
+        let teacherId = localStorage.getItem("id");
+        getWorkByLimit(teacherId, courseId, page, pageSize, number, token).then(response => {
+            switch (response.code) {
+                case Config.SUCCESS:
+                    let res = [];
+                    for (let i = 0, length = response.data.list.length; i < length; i++) {
+                        let temp = {
+                            index: i + 1,
+                            key: (i + 1).toString(),
+                            id: response.data.list[i]['id'],
+                            title: response.data.list[i]['title'],
+                            deadline: response.data.list[i]['deadline'],
+                            publish: response.data.list[i]['publish'],
+                        }
+                        res.push(temp);
+                    }
+                    this.setState({
+                        total: response.data.total,
+                        workData: res,
+                    });
+                    break;
+                case Config.SERVER_ERROR:
+                    message.error("服务器异常，请稍后再试！");
+                    break;
+                case Config.NOT_AUTHORIZE:
+                    this.props.history.push("/login");
+                    break;
+                default:
+                    message.error("未知错误，错误码：" + response.code);
+            }
+        }).catch(e => {
+            message.error("无法连接到服务器！");
+        });
     }
 
 
@@ -73,17 +109,23 @@ class CourseHomework extends Component {
             <div>
                 <Card title={'课程作业'} className={Style.matchHeight}>
                     <Tabs defaultActiveKey="1">
-                        <TabPane tab="作业管理" key="1">
-                            <Button type='primary' icon={<PlusOutlined />}>添加</Button>
-                            <Table className={Style.marginTop18} rowSelection={this.workRowSelection} columns={this.workColumns} dataSource={this.state.workData}/>
+                        <TabPane tab={<span><DatabaseOutlined />作业管理</span>} key="1">
+                            <Table pagination={{current: this.state.page, total: this.state.total, pageSize: this.state.pageSize, onChange: this.onTableChange, onShowSizeChange: this.onShowSizeChange}}
+                                   className={Style.marginTop18}
+                                   columns={this.workColumns} dataSource={this.state.workData}/>
                         </TabPane>
-                        <TabPane tab="统计分析" key="2">
-                            作业题目：
-                            <Select defaultValue={this.state.workTitle.length === 0 ? '' : this.state.workTitle[0].title} style={{ width: 200 }} onChange={this.handleWorkChange}>
-                                {this.state.workTitle.map((item, index) => {
-                                    return <Option key={index} value={item.id}>{item.title}</Option>
-                                })}
-                            </Select>
+                        <TabPane tab={<span><PlusSquareOutlined />添加作业</span>} key="2">
+                            <CourseHomeworkEdit add={true}/>
+                        </TabPane>
+                        <TabPane tab={<span><PieChartOutlined />统计分析</span>} key="3">
+                            <div className={Style.marginTop18}>
+                                作业题目：
+                                <Select defaultValue={this.state.workTitle.length === 0 ? '' : this.state.workTitle[0].title} style={{ width: 200 }} onChange={this.handleWorkChange}>
+                                    {this.state.workTitle.map((item, index) => {
+                                        return <Option key={index} value={item.id}>{item.title}</Option>
+                                    })}
+                                </Select>
+                            </div>
                             <Row gutter={16} className={Style.marginTop18}>
                                 <Col span={6}>
                                     <Card>
@@ -111,13 +153,20 @@ class CourseHomework extends Component {
                                 }
                             </div>
                         </TabPane>
-                        <TabPane tab="Tab 3" key="3">
-                            Content of Tab Pane 3
-                        </TabPane>
                     </Tabs>
                 </Card>
             </div>
         );
+    }
+
+    onTableChange = (page, pageSize) => {
+        this.getWorkColumn(page, pageSize);
+        this.setState({page, pageSize});
+    }
+
+    onShowSizeChange = (page, pageSize) => {
+        this.getWorkColumn(page, pageSize);
+        this.setState({page, pageSize});
     }
 
     handleWorkChange = workId => {
@@ -186,15 +235,14 @@ class CourseHomework extends Component {
     }
 
     edit = (text, record) => {
-        console.log(text);
-        console.log(record);
+        let courseId = this.props.match.params.id;
+        this.props.history.push(`/teacher/course/${courseId}/act/work/edit/${text.id}`);
     }
 
-    workRowSelection = {
-        type: 'checkbox',
-        onChange: (selectedRowKeys, selectedRows) => {
-            this.workRowSelection = [];
-        },
+    check = (text, record) => {
+        console.log(text);
+        let courseId = this.props.match.params.id;
+        this.props.history.push(`/teacher/course/${courseId}/act/work/check/${text.id}`)
     }
 
     workColumns = [
@@ -234,17 +282,25 @@ class CourseHomework extends Component {
             dataIndex: 'publish',
             render: publish => {
                 return (
-                    <Tag color={publish > 0 ? 'green' : 'red'}>
-                        {publish > 0 ? '已发布' : '未发布'}
+                    <Tag color={publish === -1 ? 'orange' : publish === 0 ? 'red' : 'green'}>
+                        {publish === -1 ? '待编辑' : publish === 0 ? '未发布' : '已发布'}
                     </Tag>
                 )
+            }
+        },
+        {
+            title: '批阅',
+            key: 'check',
+            dataIndex: 'check',
+            render: (text, record) => {
+                return React.createElement(CheckSquareOutlined, {className: Style.edit, onClick: this.check.bind(text, record)})
             }
         },
         {
             title: '修改',
             key: 'edit',
             render: (text, record) => {
-                return React.createElement(EditOutlined, {className: Style.edit, onClick: this.edit})
+                return React.createElement(EditOutlined, {className: Style.edit, onClick: this.edit.bind(text, record)})
             }
         },
     ]
@@ -256,7 +312,7 @@ class CourseHomework extends Component {
         },
         description: {
             visible: true,
-            text: '60以下：0≤x≤60，60~70：60≤x<70，70~80：70≤x<80，80~90：80≤x<90，90以上：90≤x≤100，',
+            text: '60以下：0≤x≤60，\n60~70：60≤x<70，\n70~80：70≤x<80，\n80~90：80≤x<90，\n90以上：90≤x≤100，',
         },
         forceFit: true,
         padding: 'auto',
@@ -285,7 +341,7 @@ class CourseHomework extends Component {
         },
         description: {
             visible: true,
-            text: '60以下：0≤x≤60，60~70：60≤x<70，70~80：70≤x<80，80~90：80≤x<90，90以上：90≤x≤100',
+            text: '60以下：0≤x≤60，\n60~70：60≤x<70，\n70~80：70≤x<80，\n80~90：80≤x<90，\n90以上：90≤x≤100',
         },
         radius: 0.75,
         angleField: 'value',

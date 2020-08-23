@@ -15,9 +15,10 @@ service.interceptors.request.use(config => {
     // 兼容 post 跨域问题
     if (config.method === 'post') {
         // 修改 Content-Type
-        config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+        /*config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
         // 将对象参数转换为序列化的 URL 形式（key=val&key=val）
         config.data = stringify(config.data);
+        console.log(config.data);*/
     }
     return config;
 }, (error) => {
@@ -125,6 +126,65 @@ const getSubmitWorkStatisticsByWorkId = (courseId, workId, number, token) => {
         params: {"workId": workId, "number": number, "token": token}
     });
 };
+const getWorkByLimit = (teacherId, courseId, page, pageSize, number, token) => {
+    return service.get(`work/${teacherId}/${courseId}/${page}/${pageSize}`, {
+        params: {"number": number, "token": token}
+    });
+};
+const getWorkById = (workId, number, token) => {
+    return service.get(`work/${workId}`, {
+        params: {"number": number, "token": token}
+    });
+};
+const addWorkInfo = (work, number, token) => {
+    return service.post(`work`, {
+        title: work.title,
+        deadline: work.deadline,
+        content: work.outputHTML,
+        permit: work.permit,
+        publish: 0,
+        number: number,
+        token: token,
+    });
+};
+const saveWorkInfoById = (work, number, token) => {
+    return service.put(`work`, {
+        id: work.id,
+        title: work.title,
+        deadline: work.deadline,
+        content: work.outputHTML,
+        permit: work.permit,
+        number: number,
+        token: token,
+    });
+};
+const publishWorkInfoById = (work, number, token) => {
+    return service.put(`work/publish`, {
+        id: work.id,
+        title: work.title,
+        deadline: work.deadline,
+        content: work.outputHTML,
+        permit: work.permit,
+        number: number,
+        token: token,
+    });
+};
+const getResourceByCourseAndTeacher = (courseId, teacherId, number, token) => {
+    return service.get(`resource/${courseId}/${teacherId}`, {
+        params: {"number": number, "token": token}
+    })
+};
+const saveResourceByCourseAndTeacher = (resource, courseId, teacherId, number, token) => {
+    return service.post(`resource`, {
+        resourceVo: resource,
+        courseId: courseId, teacherId: teacherId, number: number, token: token
+    });
+};
+const getFileByCourseAndTeacher = (page, pageSize, courseId, teacherId, number, token) => {
+    return service.get(`file/${courseId}/${teacherId}/${page}/${pageSize}`, {
+        params: {"number": number, "token": token}
+    });
+};
 
 export {
     login,
@@ -142,4 +202,12 @@ export {
     getClazzByAcademyAndGrade,
     getWorkTitleByTeacherId,
     getSubmitWorkStatisticsByWorkId,
+    getWorkByLimit,
+    getWorkById,
+    addWorkInfo,
+    saveWorkInfoById,
+    publishWorkInfoById,
+    getResourceByCourseAndTeacher,
+    saveResourceByCourseAndTeacher,
+    getFileByCourseAndTeacher,
 }

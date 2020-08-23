@@ -25,12 +25,20 @@
     margin-bottom: 24px;
 }
 
+.width300 {
+    width: 300px;
+}
+
 .marginTop30 {
     margin-top: 30px;
 }
 
 .marginTop18 {
     margin-top: 18px;
+}
+
+.marginBottom18 {
+    margin-bottom: 18px;
 }
 
 .displayFlex {
@@ -68,6 +76,11 @@
 
 .edit:hover {
     color: #f759ab;
+}
+
+.listTitle {
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .title {

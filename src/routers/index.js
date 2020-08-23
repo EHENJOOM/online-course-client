@@ -1,7 +1,7 @@
 import {
     CourseAddColumn,
     CourseAddStudent, CourseAddUnit, CourseAnswer,
-    CourseCalendar, CourseHomework, CourseHomeworkEdit,
+    CourseCalendar, CourseHomework, CourseHomeworkCheck, CourseHomeworkEdit,
     CourseIntroduce, CourseOutline, CourseResource,
     Login,
     NotFound,
@@ -105,13 +105,18 @@ const courseRoutes = [
         exact: true,
     },
     {
+        pathname: '/teacher/course/:id/act/answer',
+        component: CourseAnswer,
+        exact: true,
+    },
+    {
         pathname: '/teacher/course/:id/act/work/edit/:workId',
         component: CourseHomeworkEdit,
         exact: true,
     },
     {
-        pathname: '/teacher/course/:id/act/answer',
-        component: CourseAnswer,
+        pathname: '/teacher/course/:id/act/work/check/:workId',
+        component: CourseHomeworkCheck,
         exact: true,
     },
 ]

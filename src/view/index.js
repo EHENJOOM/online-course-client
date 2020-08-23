@@ -73,6 +73,10 @@ const CourseHomeworkEdit = Loadable({
     loader: () => import("./teacher/course/CourseHomeworkEdit"),
     loading: Loading
 });
+const CourseHomeworkCheck = Loadable({
+    loader: () => import("./teacher/course/CourseHomeworkCheck"),
+    loading: Loading
+});
 
 export {
     Login,
@@ -93,4 +97,5 @@ export {
     CourseOutline,
     CourseResource,
     CourseHomeworkEdit,
+    CourseHomeworkCheck,
 }
